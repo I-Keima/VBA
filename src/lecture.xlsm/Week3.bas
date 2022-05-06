@@ -143,7 +143,9 @@ Function matrixProduct(matrix1 As Variant, matrix2 As Variant) As Double()
 	Dim arr() As Double: ReDim arr(l, n)
 	For i = 1 To l
 		For j = 1 To n
-			arr(i, j) = arr(i, j) + matrix1(i, k) * matrix2(k, j)
+			For k = 1 To m
+				arr(i, j) = arr(i, j) + matrix1(i, k) * matrix2(k, j)
+			Next k
 		Next j
 	Next i
 	matrixProduct = arr

@@ -66,5 +66,68 @@ Sub kadai14()
 	Call printVec(2, 6, matrixVectorProduct(matrix_u, ans))
 End Sub
 
+Function identityMatrix(n As Integer) As Double()
+	Dim i As Integer, j As Integer, arr() As Double: ReDim arr(n, n)
+	For i = 1 To n
+		For j = 1 To n
+			if i = j Then
+				arr(i, j) = 1
+			Else
+				arr(i, j) = 0
+			End If
+		Next j
+	Next i
+	identityMatrix = arr
+End Function
 
-	
+Function gaussInverseMatrix(matrix_a As Variant) As Variant
+	Dim i As Integer, k As Integer, j As Integer, l As Integer, n As Integer, identity_matrix As Variant
+  n = UBound(matrix_a, 1)
+	identity_matrix = identityMatrix(n)
+  For k = 1 To n - 1
+    For i = k + 1 To n
+      For j = i To n
+        matrix_a(i, j) = matrix_a(i, j) - matrix_a(i, k) * matrix_a(k, j) / matrix_a(k, k)
+				For l = 1 To n
+        	identity_matrix(i, l) = identity_matrix(i, l) - matrix_a(i, k) * identity_matrix(k, l) / matrix_a(k, k)
+				Next l
+      Next j
+    Next i
+  Next k
+	Dim arr As Variant, b() As Double: ReDim b(n)
+	'配列の中身をVariant
+	Dim ans() As Double: ReDim ans(n, n)
+	For l = 1 To n
+		For i = 1 To n
+			b(i) = identity_matrix(i, l)
+		Next i
+		arr = backwardSubstitutution(matrix_a, b)
+		For i = 1 To n
+			ans(i, l) = arr(i)
+		Next i
+	Next l
+	gaussInverseMatrix = ans
+End Function
+
+Sub kadai15()
+	Dim matrix_a As Variant
+	matrix_a = createOnTriangleMatrix(5)
+	Call printMatrix(1, 1, matrixProduct(gaussInverseMatrix(matrix_a), matrix_a))
+End Sub
+
+Sub kadai16()
+	'学籍番号7421004
+	Dim a As Integer, b As Integer, c As Integer
+	a = 0: b = 0: c = 4
+	Dim matrix_a() As Double: ReDim matrix_a(4, 4)
+	'matrix_a As Variantなどにして、=Array(Array(),Array())のようにすると
+	'実質的な二次元配列になるが、要素の指定（インデックスの指定方法が）
+	'matrix_a(1)(1)のようになり、普段のものと異なってしまうため今回は使うのを断念
+	'大幅な修正が必要にるが上記のVariant的な書き方に統一したほうがスムーズかもしれない
+	matrix_a(1,1) = a - 2: matrix_a(1,2) = b: matrix_a(1,3) = c: matrix_a(1,4) = a+b+c
+	matrix_a(2,1) = c: matrix_a(2,2) = a - 3: matrix_a(2,3) = b: matrix_a(2,4) = a+b+c
+	matrix_a(3,1) = b: matrix_a(3,2) = c: matrix_a(3,3) = a - 4: matrix_a(3,4) = a+b+c
+	matrix_a(4,1) = 1: matrix_a(4,2) = 1: matrix_a(4,3) = 1: matrix_a(4,4) = 1
+	Call printVec(2, 1, gaussElimination(matrix_a, Array(6, 8, -2, 0.5)))
+	Call printMatrix(2, 3, gaussInverseMatrix(matrix_a))
+End Sub
