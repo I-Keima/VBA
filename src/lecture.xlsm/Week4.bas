@@ -14,6 +14,7 @@ Function forwardElimination(matrix_a As Variant, b As Variant) As Variant
       Next j
     Next i
   Next k
+	' 返り値をVariant型にすることで配列の中に配列をいれて、二つの要素を返すことが出来る
   forwardElimination = Array(matrix_a, b)
 End Function
 
@@ -43,7 +44,27 @@ Sub kadai13()
 	matrix_u = createOnTriangleMatrix(21)
 	e_n = create1NdVec(21)
 	ans = backwardSubstitutution(matrix_u, e_n)
-	MsgBox ans(5)
+	Call printVec(2, 1, ans)
+End Sub
+
+Function gaussElimination(matrix_a As Variant, b As Variant) As Variant
+	Dim j As integer, x As Variant, n As Integer
+	n = UBound(matrix_a, 1)
+	Dim ans As Variant
+	ans = forwardElimination(matrix_a, b)
+	x = backwardSubstitutution(ans(1), ans(2))
+	gaussElimination = x
+End Function
+
+Sub kadai14()
+	Dim matrix_u As Variant, e_n As Variant, ans As Variant
+	matrix_u = createOnTriangleMatrix(5)
+	e_n = create1NdVec(5)
+	ans = gaussElimination(matrix_u, e_n)
+	Call printVec(2, 3, ans)
+	Call printVec(2, 5, e_n)
+	Call printVec(2, 6, matrixVectorProduct(matrix_u, ans))
 End Sub
 
 
+	
