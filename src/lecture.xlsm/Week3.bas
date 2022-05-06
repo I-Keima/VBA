@@ -124,7 +124,7 @@ Function matrixVectorProduct(matrix_a As Variant, x As Variant) As Double()
 	Dim n as integer, m as integer, i as integer, j as integer, arr() As Double
 	n = UBound(x)
 	m = Ubound(matrix_a, 1)
-	ReDim arr(m, 1)
+	ReDim arr(m)
 	For i = 1 To m
 		For j = 1 To n
 			arr(i) = arr(i) + matrix_a(i, j) * x(j)
@@ -164,7 +164,7 @@ Sub kadai11()
 	MsgBox Cells((7421004 Mod 2022) + 1, 1)
 End Sub
 '遭遇したエラー
-	'当初printMatrix()を用いていたが、	”n = Ubound(arr, 2)”の部分でインデクスが範囲外というエラーが発生した
+	'当初printMatrix()を用いていたが、”n = Ubound(arr, 2)”の部分でインデクスが範囲外というエラーが発生した
 	'これは与えられた行列を計算する際にmatrixVectorProductを用いて行列とベクトルの積で計算したことで、
 	'printMatrix()の引数に与えられるべき行列がベクトル（1次元の配列）となり、存在しない次元を参照したことでエラーとなった。
 	'与えられた問題文より行列の積の計算結果は必ずベクトルとなるためprintVec()を用いて取り扱う行列の次元を揃えた。

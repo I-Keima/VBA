@@ -38,4 +38,4 @@ exit
         pause
         goto :copy_file
     )
-exit
+@REM exit
