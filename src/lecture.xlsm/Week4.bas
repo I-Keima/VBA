@@ -24,4 +24,26 @@ Sub kadai12()
 End Sub
 
 Function backwardSubstitutution(matrix_u As Variant, y as Variant) As Variant
-	
+	Dim i As Integer, j As Integer, x() As Double, n As Integer, s As Double
+	n = UBound(matrix_u, 1)
+	ReDim x(n)
+	x(n) = y(n) / matrix_u(n, n)
+	For i = n - 1 To 1 Step -1
+		s = 0
+		For j = i + 1 To n
+			s = s + matrix_u(i, j) * x(j)
+		Next j
+		x(i) = (y(i) - s) / matrix_u(i, i)
+	Next i
+	backwardSubstitutution = x
+End Function
+
+Sub kadai13()
+	Dim matrix_u As Variant, e_n As Variant, ans As Variant
+	matrix_u = createOnTriangleMatrix(21)
+	e_n = create1NdVec(21)
+	ans = backwardSubstitutution(matrix_u, e_n)
+	MsgBox ans(5)
+End Sub
+
+
