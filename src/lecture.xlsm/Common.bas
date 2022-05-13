@@ -4,6 +4,18 @@ Option Explicit
 Option Base 1 '配列の添え字の最小値を1に設定
 
 
+Function read_matrix
+
+Function matrix_plus(m1, m2)
+  Dim ans As Variant: ans = m1
+  For i = 1 To UBound(m1)
+    For j = 1 To Uboud(m1(1))
+      ans(i)(j) = m1(i)(j) + m2(i)(j)
+    Next j
+  Next i
+  matrixPlus = ans
+End Function
+
 Function forwardElimination_matrix(matrix_a As Variant, matrix_b As Variant) As Variant
   ' 小数の計算時の誤差を防ぐために最も値の絶対値が大きいピボットを選択し行の入れ替えを行う
   Dim i As Integer, k As Integer, j As Integer, n As Integer, pivot As Double
