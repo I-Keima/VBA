@@ -6,8 +6,10 @@ Option Base 1 '配列の添え字の最小値を1に設定
 Function forwardElimination(matrix_a As Variant, b As Variant) As Variant
   Dim i As Integer, k As Integer, j As Integer, n As Integer
   n = UBound(matrix_a, 1)
-  For k = 1 To n - 1
-    For i = k + 1 To n
+	Dim a_new, a_old, b_new, b_old As As Variant
+	a_old = matrix_a: b_old = b
+  For k = 1 To n
+    For i = k To n
       For j = i To n
         matrix_a(i, j) = matrix_a(i, j) - matrix_a(i, k) * matrix_a(k, j) / matrix_a(k, k)
         b(i) = b(i) - matrix_a(i, k) * b(k) / matrix_a(k, k)
@@ -111,8 +113,9 @@ End Function
 
 Sub kadai15()
 	Dim matrix_a As Variant
-	matrix_a = createOnTriangleMatrix(5)
-	Call printMatrix(1, 1, matrixProduct(gaussInverseMatrix(matrix_a), matrix_a))
+	matrix_a = getMatrix(1,1,3,3)
+	Call printMatrix(1,1, gaussInverseMatrix(matrix_a))
+	Call printMatrix(1,7, matrixProduct(gaussInverseMatrix(matrix_a), matrix_a))
 End Sub
 
 Sub kadai16()
