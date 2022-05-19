@@ -105,7 +105,7 @@ End Sub
 Function get_last_row(row As Integer, col As Integer) As Integer
   Dim i As Integer, last As Boolean: last = False
   i = row
-  While last
+  While not last
     If Cells(i, col) = "" Then
       last = True
     Else
@@ -208,9 +208,57 @@ Sub Kadai24()
   '積：cross_matrix(m1, m2)
 End Sub
 
+Sub kadai1()
+  Dim i, n, row, col As Integer
+  Dim s_x, s_x2, ans As Double
 
+  row = 1: col = 1
+  n = get_last_row(CInt(row), CInt(col))
+  Dim y_vec() As Double: ReDim y_vec(n)
+  For i = 1 To n
+    y_vec(i) = Cells(row + i - 1, col)
+    s_x = s_x + y_vec(i)
+    s_x2 = s_x2 + y_vec(i) ^ 2
+  Next i
+  ans = s_x2 - s_x ^ 2 / n
+  Cells(row, col + 1) = "課題1で求めた平方和"
+  Cells(row + 1, col + 1) = ans
+End Sub
 
+Sub kadai2()
+  Dim i, j, n, row, col As Integer
+  Dim ans As Double
+  
+  row = 1: col = 1
+  n = get_last_row(CInt(row), CInt(col))
+  Dim arr() As Double: ReDim arr(n)
+  Dim y_vec() As Double: ReDim y_vec(n)
+  Dim n_matrix() As Double: ReDim n_matrix(n, n)
 
+  For i = 1 To n
+    y_vec(i) = Cells(row + i - 1, col)
+    For j = 1 To n
+      If i = j Then
+        n_matrix(i, j) = 1 - 1 / n
+      Else
+        n_matrix(i, j) = 0 - 1 / n
+      End If
+    Next 
+  Next i
+
+  For j = 1 To n
+    For i =  1 To n
+      arr(j) = arr(j) + y_vec(i) * n_matrix(i, j)
+    Next i
+  Next j
+
+  For i = 1 To n
+    ans = ans + arr(i) * y_vec(i)
+  Next i
+
+  Cells(row + 3, col + 1) = "課題2で求めた平方和"
+  Cells(row + 4, col + 1) = ans
+End Sub
 
     
 
