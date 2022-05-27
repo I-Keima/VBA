@@ -102,7 +102,7 @@ Sub kadai3_4()
   '区間の幅を1とする
   Dim width As Double: width = 1
   ans = Array()
-  ReDim ans(29 / width + 1)
+  ReDim ans(29 / width + 2)
   ans(1) = Array("番号", "下限", "上限", "度数")
 
   For i = 1 To UBound(ans) - 1 
@@ -139,15 +139,78 @@ Sub kadai3_4()
 End Sub
 
 Sub kadai4()
+  Dim i, j, k As Integer
   Dim u, v, x, y As Double
   Dim ans() As Double: ReDim ans(2000)
 
-  Dim i As Integer
   For i = 1 To 2000
-    x = Sin(4 * Ath(1) * 2 * Rnd) * (-2 * Log(Rnd)) ^ (1/2) 
+    x = Sin(4 * Atn(1) * 2 * Rnd) * (-2 * Log(Rnd)) ^ (1/2) 
     ans(i) = x
   Next i
 
   Call WorkSheets("sheet3").Activate
+  '一次元配列をシートに出力(行列の一回目で作成した関数)
   Call printVec(1,1,ans)
+
+  '度数表の作成
+  Dim frequency_table, section_list As Variant
+  '確率変数は±3の範囲まででとる
+  '区間の幅を1とする
+  Dim width As Double: width = 0.1
+  frequency_table = Array()
+  '-3以下と3以上、ヘッダー分
+  ReDim frequency_table(6 / width + 2 + 1)
+  frequency_table(1) = Array("番号", "下限(以上)", "上限(未満)", "度数")
+  frequency_table(2) = Array(1, "-", -3, 0)
+  frequency_table(UBound(frequency_table)) = Array(UBound(frequency_table), 3, "-", 0)
+
+  Dim l_limit, u_limit, frequency As Double
+  For i = 1 To UBound(frequency_table) - 3 
+    l_limit = (i - 1) * width - 3
+    u_limit = i * width - 3
+    '各行の第２列に下限、第３列に上限を入れる
+    section_list = Array(i + 1, l_limit, u_limit, 0)
+    frequency_table(i + 2) = section_list
+  Next i
+
+  Dim row As Integer
+  For i = 1 To UBound(ans)
+    'Intは小数点以下の切り捨て、下限値-3がwidth*0に値するよう調整
+    'ただし添え字は1スタートなので+1
+    '±3より大きいものだけ個別に判定
+    k = Int((ans(i) + 3) / width) + 1
+    If k <= 0 Then
+      row = 2
+    ElseIf k >= 61 Then
+      row = UBound(frequency_table)
+    Else
+      row = k + 2
+    End If
+    section_list = frequency_table(row)
+    section_list(UBound(section_list)) = section_list(UBound(section_list)) + 1
+    frequency_table(row) = section_list
+  Next i
+
+  For i = 1 To UBound(frequency_table)
+    section_list = frequency_table(i)
+    For j = 1 To UBound(section_list)
+      Cells(i, j + 2) = frequency_table(i)(j)
+    Next j
+  Next i
+
+  'ワークシートで作業仕様とするとパソコンがクラッシュするためVBAでワークシート関数を用いて代用....
+  With ActiveSheet.Shapes.AddChart.Chart
+
+    .ChartType = xlColumnClustered
+    .SetSourceData Range(Cells(2, 6), Cells(UBound(frequency_table) + 2, 6))
+
+  End With
 End Sub
+
+'改善点：端点の取り扱いが難しく、どうしても各々の度数表の範囲に合わせた
+'”定数"(29や6など)がコードに入ってしまい、
+'コードの再利用が面倒になってしまっている点。
+'またシートを利用する際にそのセルの座標に関した定数も多く入ってしまった点
+'またヘッダーや表の添え字（番号）をつける処理は別関数を作ったほうがいいと感じた。
+'正規分布の範囲は±3ではなく±4のほうがよりヒストグラムの端のほうが奇麗になったのではと感じた。
+'このような変更を加えにくくなるため、やはり定数をなるべく含めないコードを書きたいと思った。
