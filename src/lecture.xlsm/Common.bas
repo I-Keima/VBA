@@ -125,3 +125,27 @@ Function forward_elimination_matrix(matrix_a As Variant, matrix_b As Variant) As
 	' 返り値をVariant型にすることで配列の中に配列をいれて、二つの要素を返すことが出来る
   forwardElimination = Array(matrix_a, b)
 End Function
+
+
+' 第一引数に対して破壊的な関数
+Function append(ar As Variant, val As Variant) As Long
+  If IsArray(val) = True Then
+    Dim size As Long: size = UBound(ar) + UBound(val)
+    ReDim Preserve ar(size)
+    
+    Dim i As Long
+    For i = size - UBound(val) + 1 To size
+      ar(i) = val(i)
+    Next i
+  Else
+    Dim size As Long: size = UBound(ar) + 1
+    ReDim Preserve ar(size)
+    ar(size) = val
+  End If
+
+  '要素数を返却
+  append = UBound(ar)
+End Function
+
+
+      
