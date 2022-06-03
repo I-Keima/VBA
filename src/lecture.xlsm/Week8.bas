@@ -6,7 +6,7 @@ Option Base 1
 '標本平均の期待値は1/2、分散は1/12n 
 
 Function rnd_uniform_distribution(n As Long) As Variant
-  Dim arr() As Double
+  Dim arr() As Double: ReDim arr(n)
   Dim i As Long
   For i = 1 To n
     arr(i) = Rnd
@@ -33,19 +33,19 @@ Sub week8_1()
   Dim i, n, m, m_max As Integer
   'mは任意の2000以上の整数
   m_max = 2000
-  Dim n_list(4) As Integer
+  Dim n_list As Variant
   '任意のnの値を設定
-  n_list = [1, 2, 5, 10]
-  create_matrix(n, m)
+  n_list = Array(1, 2, 5, 10)
+  arr = create_matrix(UBound(n_list), m_max)
 
   For i = 1 To UBound(n_list)
     For m = 1 To m_max
       sample = rnd_uniform_distribution(n_list(i))
-      arr(i, m) = sample_average(sample)
+      arr(i)(m) = sample_average(sample)
     Next m
   Next i
 
-  print_matrix(1,1,arr)
+  Call print_matrix(1,1,arr)
 End Sub
 
 
