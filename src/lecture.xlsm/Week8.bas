@@ -65,7 +65,7 @@ Sub week8_1()
   Dim frequency_table As Variant
   For i = 1 to UBound(n_list)
     '区間の幅は0.2とする
-    frequency_table = make_frequency_table(standard_arr(i), 0.5 * n_list(i) ^ (1/2) * 12 * n / 2)
+    frequency_table = make_frequency_table(standard_arr(i), 0.5 * n_list(i) ^ (1/2) * 12 * n / 5, 0.1 * i)
     'nの値の個数+3行、1 + (i - 1) * 5列目を起点とし度数表をセルに表示
     Call print_matrix(3 + UBound(n_list) * 2, 1 + (i - 1) * 5, frequency_table)
   Next i
