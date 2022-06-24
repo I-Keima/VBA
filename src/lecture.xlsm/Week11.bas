@@ -5,6 +5,10 @@ Option Base 1
 
 Function f_x(x)
   f_x = Exp(x)
+  '発展課題(week11_4)を実行する時は上行をコメントアウトし、下行を用いる
+  'f_x = Exp(-x ^ 2 / 2)
+  '(1)用
+  'f_x = x ^ 3 / 5 - 3 * x ^ 2 / 5 - 2 * x / 5 + 3
 End Function
 
 
@@ -38,9 +42,9 @@ Sub week11_1()
   Next i 
 
   Dim head As Variant
-  head = Array("区分求積法", "h=1/2", "h=1/4", "h=1/8")
-  Call print_matrix(head, 1, 1)
-  Call print_matrix(ans, 2, 2)
+  head = Array("中点則", "h=1/2", "h=1/4", "h=1/8")
+  Call print_array(1, 1, head)
+  Call print_array(2, 2, ans)
 End Sub
 
 
@@ -75,8 +79,8 @@ Sub week11_2()
 
   Dim head As Variant
   head = Array("台形則", "h=1/2", "h=1/4", "h=1/8")
-  Call print_matrix(head, 4, 1)
-  Call print_matrix(ans, 5, 2)
+  Call print_array(4, 1, head)
+  Call print_array(5, 2, ans)
 End Sub
 
 
@@ -102,7 +106,50 @@ Sub week11_3()
 
   Dim head As Variant
   head = Array("シンプソン則", "h=1/2", "h=1/4", "h=1/8")
-  Call print_matrix(head, 7, 1)
-  Call print_matrix(ans, 8, 2)
+  Call print_array(7, 1, head)
+  Call print_array(8, 2, ans)
 End Sub
 
+
+Sub week11_4()
+  Dim epsilon, h, abs_f, x_min, x, integration_value, error, true_value As Double
+  Dim large_n, i, k As Integer
+  Dim ans As Variant
+  ans = create_matrix(4,3)
+  ans(1) = Array("", "近似値", "真値", "誤差")
+  epsilon = 0.002
+  h = 0.5
+  i = 0
+  x_min = 0
+  true_value = 1.2533141
+
+  abs_f = 1
+  While abs_f >= epsilon
+    i = i + 1
+    x = x_min + h * i
+    abs_f = Abs(f_x(x)) + Abs(f_x(x + h))
+  Wend
+  large_n = i
+
+
+  integration_value = midpoint_rule(h, CDbl(x_min), CDbl(large_n))
+  error = Abs(integration_value - true_value)
+  ans(2) = Array("中点則", integration_value, true_value, error)
+
+  integration_value = trapezoidal_rule(h, CDbl(x_min), CDbl(large_n))
+  error = Abs(integration_value - true_value)
+  ans(3) = Array("台形則", integration_value, true_value, error)
+
+  integration_value = simpsons_rule(h, CDbl(x_min), CDbl(large_n))
+  error = Abs(integration_value - true_value)
+  ans(4) = Array("シンプソン則", integration_value, true_value, error)
+
+  Call print_matrix(10, 1, ans)
+End Sub
+  
+Sub week11_kiso()
+  Dim h As double: h = 1/4
+  Cells(16,1) = midpoint_rule(h, 0, 4)
+  Cells(16, 2) = trapezoidal_rule(h, 0, 4)
+  Cells(16, 3) = simpsons_rule(h, 0, 4)
+End Sub

@@ -91,6 +91,13 @@ Function print_matrix(row, col, m)
   Next i
 End Function
 
+Function print_array(row, col, m)
+  Dim i As Integer
+  For i = 1 To UBound(m)
+      Cells(row, col + i - 1) = m(i)
+  Next i
+End Function
+
 
 Function matrix_plus(m1, m2)
   Dim i, j As Integer
